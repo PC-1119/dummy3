@@ -1,0 +1,53 @@
+name: Renovate Security Scan
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Trivy
+        run: |
+          sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+          echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+          sudo apt-get update
+          sudo apt-get install trivy -y
+
+      - name: Run Trivy scan
+        run: |
+          trivy fs --format json --output trivy-report.json .
+
+      - name: Evaluate vulnerabilities
+        run: |
+          python <<EOF
+import json, sys
+
+with open("trivy-report.json") as f:
+    data = json.load(f)
+
+block_merge = False
+
+for result in data.get("Results", []):
+    for vuln in result.get("Vulnerabilities", []):
+        severity = vuln.get("Severity")
+        fixed = vuln.get("FixedVersion")
+
+        if severity in ["HIGH","CRITICAL"]:
+            if fixed and fixed.strip() != "":
+                print(f"Blocking: {vuln['VulnerabilityID']} has fix {fixed}")
+                block_merge = True
+            else:
+                print(f"Allowed: {vuln['VulnerabilityID']} has no fixed version")
+
+if block_merge:
+    sys.exit(1)
+else:
+    print("No blocking vulnerabilities found")
+EOF
