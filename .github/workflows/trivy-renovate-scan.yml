@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Trivy
+      - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y wget jq
@@ -21,21 +21,21 @@ jobs:
           sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
 
       - name: Run Trivy scan
-        run: |
-          trivy fs --format json --output trivy-report.json .
+        run: trivy fs --format json --output trivy-report.json .
 
       - name: Evaluate vulnerabilities
+        shell: bash
         run: |
           BLOCK=false
 
-          jq -c '.Results[].Vulnerabilities[]?' trivy-report.json | while read vuln; do
-            severity=$(echo $vuln | jq -r '.Severity')
-            fixed=$(echo $vuln | jq -r '.FixedVersion')
+          jq -c '.Results[].Vulnerabilities[]?' trivy-report.json | while read -r vuln; do
+            severity=$(echo "$vuln" | jq -r '.Severity')
+            fixed=$(echo "$vuln" | jq -r '.FixedVersion')
 
             if [[ "$severity" == "HIGH" || "$severity" == "CRITICAL" ]]; then
-              if [[ "$fixed" != "" && "$fixed" != "null" ]]; then
+              if [[ -n "$fixed" && "$fixed" != "null" ]]; then
                 echo "Blocking vulnerability with fix available:"
-                echo $vuln
+                echo "$vuln"
                 BLOCK=true
               else
                 echo "High/Critical vulnerability but no fix available. Allowed."
