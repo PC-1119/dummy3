@@ -1,0 +1,53 @@
+name: Renovate Security Scan
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - renovate/all-non-breaking-dependencies
+
+jobs:
+  trivy-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget jq
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
+          sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
+
+      - name: Run Trivy scan
+        run: trivy fs --format json --output trivy-report.json .
+
+      - name: Evaluate vulnerabilities
+        shell: bash
+        run: |
+          BLOCK=false
+          VULNS=$(jq -c '.Results[].Vulnerabilities[]?' trivy-report.json)
+
+          for vuln in $VULNS; do
+            severity=$(echo "$vuln" | jq -r '.Severity')
+            fixed=$(echo "$vuln" | jq -r '.FixedVersion')
+
+            if [[ "$severity" == "HIGH" || "$severity" == "CRITICAL" ]]; then
+              if [[ -n "$fixed" && "$fixed" != "null" ]]; then
+                echo "Blocking vulnerability with fix available:"
+                echo "$vuln"
+                BLOCK=true
+              else
+                echo "High/Critical vulnerability but no fix available. Allowed."
+              fi
+            fi
+          done
+
+          if [ "$BLOCK" = true ]; then
+            echo "Failing workflow because fixable vulnerabilities exist."
+            exit 1
+          else
+            echo "No blocking vulnerabilities."
+          fi
