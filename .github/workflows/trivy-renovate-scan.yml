@@ -38,6 +38,6 @@ jobs:
           
           # Extract only LOW/HIGH/CRITICAL vulnerabilities with a FixedVersion
           jq '[.Results[].Vulnerabilities[]? 
-                | select(.Severity=="LOW" or .Severity=="HIGH" or .Severity=="CRITICAL") 
+                | select(.Severity=="LOW" or .Severity=="MEDIUM" or .Severity=="HIGH" or .Severity=="CRITICAL") 
                 | select(.FixedVersion != null and .FixedVersion != "") 
                 | {Package: .PkgName, Severity: .Severity, InstalledVersion: .InstalledVersion, FixedVersion: .FixedVersion}]' trivy-report.json
