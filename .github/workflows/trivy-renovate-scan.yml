@@ -27,8 +27,9 @@ jobs:
         shell: bash
         run: |
           BLOCK=false
+          VULNS=$(jq -c '.Results[].Vulnerabilities[]?' trivy-report.json)
 
-          jq -c '.Results[].Vulnerabilities[]?' trivy-report.json | while read -r vuln; do
+          for vuln in $VULNS; do
             severity=$(echo "$vuln" | jq -r '.Severity')
             fixed=$(echo "$vuln" | jq -r '.FixedVersion')
 
