@@ -1,6 +1,7 @@
 name: Renovate Security Scan
 
 on:
+  workflow_dispatch: 
   pull_request:
     branches:
       - main
