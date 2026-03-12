@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - renovate/all-non-breaking-dependencies
+      - main
 
 jobs:
   trivy-scan:
@@ -30,27 +30,14 @@ jobs:
           set -x
           trivy fs --format json --output trivy-report.json .
 
-      - name: Print LOW/HIGH/CRITICAL vulnerabilities with fixes
+      - name: Print vulnerabilities in JSON
         shell: bash
         run: |
           set -x
-          echo ""
-          echo "| Vulnerability ID | Package | Severity | Installed Version | Fixed Version |"
-          echo "|-----------------|---------|---------|-----------------|---------------|"
-
-          # Pipe JSON objects safely to a while loop
-          jq -c '.Results[].Vulnerabilities[]? 
-                 | select(.Severity=="LOW" or .Severity=="HIGH" or .Severity=="CRITICAL") 
-                 | select(.FixedVersion != null and .FixedVersion != "")' trivy-report.json \
-            | while IFS= read -r vuln; do
-                VULN_ID=$(echo "$vuln" | jq -r '.VulnerabilityID')
-                PACKAGE=$(echo "$vuln" | jq -r '.PkgName')
-                SEVERITY=$(echo "$vuln" | jq -r '.Severity')
-                INSTALLED=$(echo "$vuln" | jq -r '.InstalledVersion')
-                FIXED=$(echo "$vuln" | jq -r '.FixedVersion')
-
-                echo "| $VULN_ID | $PACKAGE | $SEVERITY | $INSTALLED | $FIXED |"
-            done
-
-          echo ""
-          echo "Trivy scan completed. Only vulnerabilities with available fixes are listed."
+          echo "Filtered vulnerabilities with available fixes:"
+          
+          # Extract only LOW/HIGH/CRITICAL vulnerabilities with a FixedVersion
+          jq '[.Results[].Vulnerabilities[]? 
+                | select(.Severity=="LOW" or .Severity=="HIGH" or .Severity=="CRITICAL") 
+                | select(.FixedVersion != null and .FixedVersion != "") 
+                | {Package: .PkgName, Severity: .Severity, InstalledVersion: .InstalledVersion, FixedVersion: .FixedVersion}]' trivy-report.json
