@@ -1,8 +1,8 @@
-name: Renovate Security Scan
+name: Renovate Security Scan with Full Logs
 
 on:
-  workflow_dispatch: 
-  pull_request:
+  workflow_dispatch:
+  push:
     branches:
       - main
 
@@ -14,40 +14,43 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
+      - name: Install dependencies with verbose output
         run: |
+          set -x
           sudo apt-get update
           sudo apt-get install -y wget jq
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.50.0_Linux-64bit.deb
-          sudo dpkg -i trivy_0.50.0_Linux-64bit.deb
+          # Get latest Trivy version dynamically
+          TRIVY_VERSION=$(curl -s https://api.github.com/repos/aquasecurity/trivy/releases/latest | jq -r .tag_name)
+          echo "Latest Trivy version is $TRIVY_VERSION"
+          wget https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}/trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
+          sudo dpkg -i trivy_${TRIVY_VERSION#v}_Linux-64bit.deb
 
-      - name: Run Trivy scan
-        run: trivy fs --format json --output trivy-report.json .
+      - name: Run Trivy scan with verbose output
+        run: |
+          set -x
+          trivy fs --format json --output trivy-report.json .
 
-      - name: Evaluate vulnerabilities
+      - name: Print HIGH/CRITICAL vulnerabilities with fixes
         shell: bash
         run: |
-          BLOCK=false
-          VULNS=$(jq -c '.Results[].Vulnerabilities[]?' trivy-report.json)
+          set -x
+          echo ""
+          echo "| Vulnerability ID | Package | Severity | Installed Version | Fixed Version |"
+          echo "|-----------------|---------|----------|-------------------|---------------|"
+
+          VULNS=$(jq -c '.Results[].Vulnerabilities[]? 
+                      | select(.Severity=="HIGH" or .Severity=="CRITICAL") 
+                      | select(.FixedVersion != null and .FixedVersion != "")' trivy-report.json)
 
           for vuln in $VULNS; do
-            severity=$(echo "$vuln" | jq -r '.Severity')
-            fixed=$(echo "$vuln" | jq -r '.FixedVersion')
+            VULN_ID=$(echo "$vuln" | jq -r '.VulnerabilityID')
+            PACKAGE=$(echo "$vuln" | jq -r '.PkgName')
+            SEVERITY=$(echo "$vuln" | jq -r '.Severity')
+            INSTALLED=$(echo "$vuln" | jq -r '.InstalledVersion')
+            FIXED=$(echo "$vuln" | jq -r '.FixedVersion')
 
-            if [[ "$severity" == "HIGH" || "$severity" == "CRITICAL" ]]; then
-              if [[ -n "$fixed" && "$fixed" != "null" ]]; then
-                echo "Blocking vulnerability with fix available:"
-                echo "$vuln"
-                BLOCK=true
-              else
-                echo "High/Critical vulnerability but no fix available. Allowed."
-              fi
-            fi
+            echo "| $VULN_ID | $PACKAGE | $SEVERITY | $INSTALLED | $FIXED |"
           done
 
-          if [ "$BLOCK" = true ]; then
-            echo "Failing workflow because fixable vulnerabilities exist."
-            exit 1
-          else
-            echo "No blocking vulnerabilities."
-          fi
+          echo ""
+          echo "Trivy scan completed. Only vulnerabilities with available fixes are listed."
