@@ -1,4 +1,6 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
   "docker": {
     "enabled": true,
     "registryUrls": [
@@ -8,9 +10,17 @@
   "hostRules": [
     {
       "hostType": "docker",
-      "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com",
+      "matchHost": "https://819004394028.dkr.ecr.us-east-1.amazonaws.com",
       "username": "${AWS_ACCESS_KEY_ID}",
       "password": "${AWS_SECRET_ACCESS_KEY}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchManagers": ["Dockerfile"],
+      "matchPackageNames": ["pythonbaseimage"],
+      "versioning": "semver",
+      "enabled": true
     }
   ]
 }
