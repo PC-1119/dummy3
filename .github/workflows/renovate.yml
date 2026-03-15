@@ -1,38 +1,35 @@
-name: Renovate
+name: Renovate AWS Integration
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '0 3 * * *'  # Runs daily at 3 AM UTC
   push:
     branches:
-      - main  # Runs on every push to the 'main' branch
+      - main
 
 jobs:
   renovate:
     runs-on: ubuntu-latest
-    env:
-      RENOVATE_LOG_LEVEL: debug  # Enable debug logging for troubleshooting
+
     steps:
-      - name: Checkout the repository
+      # Step 1: Checkout the repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      # Step 1: Set up AWS credentials (for ECR access)
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Replace with your region
-
-      # Step 2: Log in to ECR
-      - name: Log in to Amazon ECR
+      # Step 2: Set up AWS credentials from GitHub Secrets
+      - name: Set up AWS credentials
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 819004394028.dkr.ecr.us-east-1.amazonaws.com
-
-      # Step 3: Run Renovate with custom configuration file
+          # Verify AWS credentials are set up correctly (optional but useful for debugging)
+          aws sts get-caller-identity
+          
+      # Step 3: Run Renovate (you can add additional arguments if needed)
       - name: Run Renovate
-        uses: renovatebot/github-action@v40.0.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          configurationFile: renovate.json  # Specify your custom config file if applicable
+        run: |
+          npx renovate
+          
+      # Step 4: Optionally, interact with AWS services (for example, pushing to ECR)
+      - name: AWS ECR Push Example (Optional)
+        run: |
+          # Authenticate Docker to AWS ECR (example)
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 819004394028.dkr.ecr.us-east-1.amazonaws.com
