@@ -9,7 +9,7 @@
     },
   "packageRules": [
     {
-      "matchManagers": ["Dockerfile"],
+      "matchManagers": ["dockerfile"],
       "matchPackageNames": ["pythonbaseimage"],
       "versioning": "semver",
       "enabled": true
