@@ -11,5 +11,16 @@
       "versioning": "semantic",
       "registryUrls": ["https://819004394028.dkr.ecr.us-east-1.amazonaws.com"]
     }
+  ],
+  "docker": {
+    "enabled": true
+  },
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com",
+      "username": "${{ secrets.AWS_ACCESS_KEY_ID }}",
+      "password": "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+    }
   ]
 }
