@@ -13,6 +13,6 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
     steps:
-      - uses: renovatebot/github-action@v1
+      - uses: renovatebot/github-action@v40
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
