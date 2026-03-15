@@ -3,6 +3,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *' # Runs daily at 3 AM UTC
+  push:                  # Runs on every push to any branch
 
 jobs:
   renovate:
