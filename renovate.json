@@ -6,7 +6,7 @@
       "groupName": "all non-breaking dependencies"
     },
     {
-      "matchManagers": ["Dockerfile"],
+      "matchManagers": ["dockerfile"],
       "enabled": true,
       "versioning": "semantic",
       "registryUrls": ["https://819004394028.dkr.ecr.us-east-1.amazonaws.com"]
@@ -16,6 +16,6 @@
     "enabled": true
   },
   "fileMatch": [
-    "**/Dockerfile"
+    "Dockerfile"
   ]
 }
