@@ -16,6 +16,6 @@
     "enabled": true
   },
   "fileMatch": [
-    "**/Dockerfile"  # Explicitly match the Dockerfile in all directories
+    "**/Dockerfile"
   ]
 }
