@@ -1,6 +1,6 @@
 # checking
 
-FROM public.ecr.aws/e8c3u3r1/pythonbaseimage:v1.0.120
+FROM public.ecr.aws/e8c3u3r1/pythonbaseimage:v1.0.121
 
 RUN apt-get update && apt-get install -y curl wget && rm -rf /var/lib/apt/lists/*
 
