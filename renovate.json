@@ -1,22 +1,15 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "docker": {
     "registryUrls": [
       "https://819004394028.dkr.ecr.us-east-1.amazonaws.com"
-    ],
-    "auth": {
-      "username": "AKIA35MDXJIWBHPKKT74",
-      "password": "IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
-    }
+    ]
   },
   "packageRules": [
     {
-      "packagePatterns": ["^pythonbaseimage$"],
-      "enabled": true,
+      "matchPackageNames": ["pythonbaseimage"],
       "versioning": "semver",
-      "docker": {
-        "enabled": true,
-        "updateTypes": ["minor", "patch"]
-      }
+      "enabled": true
     }
   ]
 }
