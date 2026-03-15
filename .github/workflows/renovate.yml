@@ -4,22 +4,35 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '0 3 * * *'  # Runs daily at 3 AM UTC
-  push:  # Runs on every push to any branch
+  push:
+    branches:
+      - main  # Runs on every push to the 'main' branch
 
 jobs:
   renovate:
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: us-east-1
       RENOVATE_LOG_LEVEL: debug  # Enable debug logging for troubleshooting
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Run Renovate with Custom Configuration File
+      # Step 1: Set up AWS credentials (for ECR access)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  # Replace with your region
+
+      # Step 2: Log in to ECR
+      - name: Log in to Amazon ECR
+        run: |
+          aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 819004394028.dkr.ecr.us-east-1.amazonaws.com
+
+      # Step 3: Run Renovate with custom configuration file
+      - name: Run Renovate
         uses: renovatebot/github-action@v40.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          configurationFile: renovate.json
+          configurationFile: renovate.json  # Specify your custom config file if applicable
