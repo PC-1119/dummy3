@@ -2,16 +2,14 @@
   "extends": ["config:recommended"],
   "packageRules": [
     {
-      "matchUpdateTypes": ["minor", "patch"],
+      "matchUpdateTypes": ["minor", "patch", "major"],
       "groupName": "all non-breaking dependencies"
     },
     {
-      "matchManagers": ["dockerfile"],
+      "matchManagers": ["Dockerfile"],
       "enabled": true,
       "versioning": "semantic",
-      "updateTypes": ["patch", "minor", "major"],
-      "registryUrls": ["https://819004394028.dkr.ecr.us-east-1.amazonaws.com"],
-      "authToken": "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }};AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }};"
+      "registryUrls": ["https://819004394028.dkr.ecr.us-east-1.amazonaws.com"]
     }
   ]
 }
