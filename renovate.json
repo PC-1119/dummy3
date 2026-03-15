@@ -5,6 +5,7 @@
   "packageRules": [
     {
       "matchDatasources": ["docker"],
+      "matchPackageNames": ["public.ecr.aws/e8c3u3r1/pythonbaseimage"],
       "versioning": "semver"
     }
   ]
