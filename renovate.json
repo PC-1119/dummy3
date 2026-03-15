@@ -14,7 +14,7 @@
       ],
       "versioning": "docker"
     }
-  ]
+  ],
   
   "hostRules": [
     {
