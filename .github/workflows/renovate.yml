@@ -1,9 +1,10 @@
 name: Renovate
+
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 3 * * *' # Runs daily at 3 AM UTC
-  push:                  # Runs on every push to any branch
+    - cron: '0 3 * * *'  # Runs daily at 3 AM UTC
+  push:  # Runs on every push to any branch
 
 jobs:
   renovate:
@@ -12,9 +13,13 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_DEFAULT_REGION: us-east-1
-      RENOVATE_LOG_LEVEL: debug
+      RENOVATE_LOG_LEVEL: debug  # Enable debug logging for troubleshooting
     steps:
-      - uses: renovatebot/github-action@v40.0.0
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Run Renovate with Custom Configuration File
+        uses: renovatebot/github-action@v40.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          extraArgs: '--autodiscover'
+          configurationFile: renovate.json
