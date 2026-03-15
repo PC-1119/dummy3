@@ -4,10 +4,19 @@
       "https://819004394028.dkr.ecr.us-east-1.amazonaws.com"
     ],
     "auth": {
-      "aws": {
-        "username": "AKIA35MDXJIWBHPKKT74",
-        "password": "$IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
+      "username": "AKIA35MDXJIWBHPKKT74",
+      "password": "IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
+    }
+  },
+  "packageRules": [
+    {
+      "packagePatterns": ["^pythonbaseimage$"],
+      "enabled": true,
+      "versioning": "semver",
+      "docker": {
+        "enabled": true,
+        "updateTypes": ["minor", "patch"]
       }
     }
-  }
+  ]
 }
