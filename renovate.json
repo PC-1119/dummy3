@@ -2,13 +2,17 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "recreateClosed": true,
+
   "prHourlyLimit": 10,
   "prConcurrentLimit": 10,
+
   "packageRules": [
     {
       "matchDatasources": ["docker"],
-      "matchPackageNames": ["public.ecr.aws/e8c3u3r1/pythonbaseimage"],
-      "versioning": "semver"
+      "matchPackageNames": [
+        "819004394028.dkr.ecr.us-east-1.amazonaws.com/pythonbaseimage"
+      ],
+      "versioning": "docker"
     }
   ]
 }
