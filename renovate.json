@@ -11,8 +11,8 @@
     {
       "hostType": "docker",
       "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com",
-      "username": "AWS",  // Correct username for AWS ECR login
-      "password": "${AWS_SECRET_ACCESS_KEY}"  // Use the secret access key as the password
+      "username": "AWS",
+      "password": "${AWS_SECRET_ACCESS_KEY}"
     }
   ],
   "packageRules": [
