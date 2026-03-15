@@ -5,8 +5,8 @@
     ],
     "auth": {
       "aws": {
-        "accessKeyId": "AKIA35MDXJIWBHPKKT74",
-        "secretAccessKey": "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",
+        "username": "AKIA35MDXJIWBHPKKT74",
+        "password": "$IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
       }
     }
   }
