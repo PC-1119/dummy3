@@ -1,18 +1,10 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "docker": {
-    "enabled": true,
-    "registryUrls": [
-      "https://public.ecr.aws/e8c3u3r1/pythonbaseimage"
-    ]
-  },
   "packageRules": [
     {
-      "matchManagers": ["Dockerfile"],
-      "matchPackageNames": ["pythonbaseimage"],
-      "versioning": "semver",
-      "enabled": true
+      "matchDatasources": ["docker"],
+      "versioning": "semver"
     }
   ]
 }
