@@ -2,6 +2,8 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "recreateClosed": true,
+  "prHourlyLimit": 10,
+  "prConcurrentLimit": 10,
   "packageRules": [
     {
       "matchDatasources": ["docker"],
