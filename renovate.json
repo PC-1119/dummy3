@@ -1,7 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "env-regex": "^(?:RENOVATE_\\w+|LOG_LEVEL|Renovate_token|AWS_\\w+)$",
   "docker": {
     "enabled": true,
     "registryUrls": [
