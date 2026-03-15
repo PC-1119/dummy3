@@ -5,6 +5,17 @@
       "https://819004394028.dkr.ecr.us-east-1.amazonaws.com"
     ]
   },
+  "hostRules": [
+    {
+      "hostType": "docker",
+      "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com", 
+      "username": "AKIAABCDEFGHIJKLMNOPQ",
+      "encrypted": {
+        "password": "U2FsdGVkX18h4csbhMV5DYF5x+kaz6Ja7aFT6B9DJIAH4FijpDoKF+AltJqzQSYc
+GEVbHeZGiVwECcZ+i/gpmg=="
+      }
+    }
+  ],
   "packageRules": [
     {
       "matchPackageNames": ["pythonbaseimage"],
