@@ -2,6 +2,8 @@ name: Renovate
 
 on:
   push:
+    branches:
+      - testing 
   workflow_dispatch:
 
 permissions:
