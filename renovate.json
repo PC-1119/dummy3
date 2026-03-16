@@ -17,8 +17,8 @@
     {
       "hostType": "ecr",
       "matchHost": "https://819004394028.dkr.ecr.us-east-1.amazonaws.com",
-      "username": "AKIA35MDXJIWBHPKKT74",
-      "password": "IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
+      "username": "{{MEND_AWS_ACCESS_KEY_ID}}",
+      "password": "{{MEND_AWS_SECRET_ACCESS_KEY}}"
     }
   ]
 }
