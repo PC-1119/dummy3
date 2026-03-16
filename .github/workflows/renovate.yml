@@ -58,3 +58,4 @@ jobs:
         env:
           LOG_LEVEL: debug
           RENOVATE_REPOSITORIES: PC-1119/dummy3
+          DOCKER_CONFIG: /home/runner/.docker
