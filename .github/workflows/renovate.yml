@@ -4,10 +4,6 @@ on:
   push:
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read
-
 jobs:
   renovate:
     runs-on: ubuntu-latest
@@ -16,30 +12,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials via OIDC role assumption
-        uses: aws-actions/configure-aws-credentials@v6
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::819004394028:role/github-ecr-renovate
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
-
-      - name: Logout old Docker credentials
-        run: docker logout 819004394028.dkr.ecr.us-east-1.amazonaws.com || true
-
-      - name: Login to ECR
-        run: |
-          aws ecr get-login-password --region us-east-1 \
-          | docker login \
-            --username AWS \
-            --password-stdin 819004394028.dkr.ecr.us-east-1.amazonaws.com
 
       - name: Run Renovate
         uses: renovatebot/github-action@v46.1.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
         env:
-          AWS_ACCESS_KEY_ID: ${{ env.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ env.AWS_SECRET_ACCESS_KEY }}
-          AWS_SESSION_TOKEN: ${{ env.AWS_SESSION_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
           RENOVATE_REPOSITORIES: ${{ github.repository }}
-          LOG_LEVEL: debug   
