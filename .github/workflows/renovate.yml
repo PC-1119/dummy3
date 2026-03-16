@@ -4,6 +4,10 @@ on:
   push:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   renovate:
     runs-on: ubuntu-latest
@@ -13,7 +17,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials via OIDC role assumption
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: arn:aws:iam::819004394028:role/github-ecr-renovate
           aws-region: us-east-1
