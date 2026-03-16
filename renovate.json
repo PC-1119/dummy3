@@ -1,6 +1,9 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
+  "extends": [
+    "config:recommended"
+  ],
+  "recreateWhen": "always",
   "recreateClosed": true,
   "prHourlyLimit": 10,
   "prConcurrentLimit": 10,
@@ -15,10 +18,10 @@
   ],
   "hostRules": [
     {
-      "hostType": "ecr",
-      "matchHost": "https://819004394028.dkr.ecr.us-east-1.amazonaws.com",
+      "hostType": "docker",
+      "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com",
       "username": "AWS",
-      "password": "{{MEND_AWS_SECRET_ACCESS_KEY}}"
+      "password": "{{ secrets.MEND_AWS_SECRET_ACCESS_KEY }}"
     }
-  ]
+  ],
 }
