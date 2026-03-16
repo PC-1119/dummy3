@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           echo "RENOVATE_GITHUB_ACTOR=${{ github.actor }}" >> "$GITHUB_ENV"
-          echo "RENOVATE_GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> "$GITHUB_ENV"
+          echo "RENOVATE_GITHUB_TOKEN=${{ secrets.RENOVATE_TOKEN }}" >> "$GITHUB_ENV"
 
       # 6️⃣ Run Renovate
       - name: Run Renovate
