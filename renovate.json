@@ -15,4 +15,10 @@
       "versioning": "docker"
     }
   ],
+  {
+  "hostType": "ecr",
+  "matchHost": "https://819004394028.dkr.ecr.us-east-1.amazonaws.com",
+  "username": "AKIA35MDXJIWBHPKKT74",
+  "password": "IfkKEMtEKiLBwasOZv+rXGauV3AWORRvIS2/EeEi"
+}
 }
