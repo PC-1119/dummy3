@@ -39,3 +39,4 @@ jobs:
           AWS_REGION: us-east-1
           RENOVATE_REPOSITORIES: ${{ github.repository }}
           LOG_LEVEL: debug
+          DOCKER_CONFIG: /home/runner/.docker
