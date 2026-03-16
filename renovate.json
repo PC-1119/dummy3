@@ -14,14 +14,5 @@
       ],
       "versioning": "docker"
     }
-    ],
-  
-  "hostRules": [
-    {
-      "hostType": "docker",
-      "matchHost": "819004394028.dkr.ecr.us-east-1.amazonaws.com",
-      "username": "AWS",
-      "password": "{{ env.MEND_AWS_SECRET_ACCESS_KEY }}"
-    }
   ]
 }
