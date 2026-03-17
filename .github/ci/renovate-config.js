@@ -1,4 +1,6 @@
 module.exports = {
+  recreateClosed: true,
+
   hostRules: [
     {
       hostType: "docker",
@@ -12,7 +14,7 @@ module.exports = {
       versioning: "docker"
     },
     {
-      matchPackagePatterns: [".*"],   // match all packages
+      matchPackagePatterns: [".*"],
       groupName: "all-dependencies",
       groupSlug: "all-dependencies",
       separateMajorMinor: false,
