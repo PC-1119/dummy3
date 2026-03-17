@@ -18,7 +18,8 @@ module.exports = {
       groupName: "all-dependencies",
       groupSlug: "all-dependencies",
       separateMajorMinor: false,
-      separateMinorPatch: false
+      separateMinorPatch: false,
+      ignorePackages: ["django"]
     }
   ]
 };
