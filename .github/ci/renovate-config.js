@@ -1,5 +1,6 @@
 module.exports = {
   recreateClosed: true,
+
   hostRules: [
     {
       hostType: "docker",
@@ -9,7 +10,7 @@ module.exports = {
 
   packageRules: [
     {
-      matchPackageNames: ["django"],
+      matchPackageNames: ["django", "github-actions"],
       enabled: false,
     },
     {
