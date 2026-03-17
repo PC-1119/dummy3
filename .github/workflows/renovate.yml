@@ -14,7 +14,7 @@ jobs:
     steps:
       # 1️⃣ Checkout repository
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # 2️⃣ Configure AWS credentials via OIDC role assumption
       - name: Configure AWS credentials via OIDC
@@ -50,7 +50,7 @@ jobs:
 
       # 6️⃣ Run Renovate
       - name: Run Renovate
-        uses: renovatebot/github-action@v46.1.4
+        uses: renovatebot/github-action@v46.1.5
         with:
           token: ${{ secrets.RENOVATE_TOKEN }}
           env-regex: "^(RENOVATE_.*|AWS_.*)$"
