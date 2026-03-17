@@ -10,7 +10,11 @@ module.exports = {
 
   packageRules: [
     {
-      matchPackageNames: ["django", "github-actions"],
+      matchPackageNames: [
+        "django",
+        "renovatebot/github-action",
+        "actions/checkout"
+      ],
       enabled: false,
     },
     {
