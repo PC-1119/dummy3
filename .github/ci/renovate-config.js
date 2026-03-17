@@ -1,6 +1,5 @@
 module.exports = {
   recreateClosed: true,
-
   hostRules: [
     {
       hostType: "docker",
@@ -9,6 +8,10 @@ module.exports = {
   ],
 
   packageRules: [
+    {
+      matchPackageNames: ["django"],
+      enabled: false,
+    },
     {
       matchDatasources: ["docker"],
       versioning: "docker"
@@ -19,7 +22,6 @@ module.exports = {
       groupSlug: "all-dependencies",
       separateMajorMinor: false,
       separateMinorPatch: false,
-      ignorePackages: ["django"]
     }
   ]
 };
