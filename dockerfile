@@ -1,6 +1,6 @@
 # checking
 
-FROM 819004394028.dkr.ecr.us-east-1.amazonaws.com/pythonbaseimage:v1.0.120
+FROM .dkr.ecr..amazonaws.com/base-images/null:1.1.41
 
 RUN apt-get update && apt-get install -y curl wget && rm -rf /var/lib/apt/lists/*
 
